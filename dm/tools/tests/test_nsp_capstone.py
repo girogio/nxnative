@@ -5,6 +5,7 @@ import unittest
 from unittest import mock
 
 spec = importlib.util.spec_from_file_location('nsp_capstone', Path(__file__).resolve().parents[3] / 'scripts/build_ipa_from_nsp.py')
+assert spec is not None and spec.loader is not None
 nsp = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(nsp)
 
