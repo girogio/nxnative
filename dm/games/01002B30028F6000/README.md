@@ -34,6 +34,8 @@ No `pad_layout`: the virtual gamepad starts in the 2D layout (the default).
 
 ## Found on this game
 
+- **Resolved: base-release packing stopped before rewriting `sdk` with `CS_ARCH_ARM64` undefined.** The installed Capstone 6 API was incompatible; [Capstone API version](../../../docs/reference/rewriter.md#capstone-api-version) records the dependency fix. This does not establish gameplay support for the base release.
+
 General host changes first needed here; each applies to every game:
 
 - **MonoGame effects** (MGFX) in XNB files and in `main` (`mgfx_effect` in `shader_split.py`): [MGFX effects in MonoGame XNB files](../../../docs/reference/shaders.md#mgfx-effects-in-monogame-xnb-files).
