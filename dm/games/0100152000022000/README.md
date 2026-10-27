@@ -6,6 +6,8 @@ Brought up on the Mac from 4.0.0: boot, the title with its demo race, the Mii pi
 
 ## What it needs
 
+**Current:** the base release (`v0`) uses AArch32 (NPDM flags `0x4`, ELF32 dynamic entries); it cannot run on this host. Use the base NSP with the tested 4.0.0 update (`v1441792`). The packing script rejects the unsupported architecture before reading symbols.
+
 | Setting | Where | Why |
 |---|---|---|
 | `render_cond on` | [`game.tsv`](game.tsv) | the race records `SetRenderEnableConditional` as a course loads: evaluated at replay, as on the GPU (drawn anyway, the same race route at the same frames looked the same; evaluated is NVN's behaviour) |
@@ -56,6 +58,8 @@ The game builds Mii heads from the console's MiiModel system data, starting at b
 - From a fresh save, L+R at the title opens "Select a Mii" (Right, A takes the first default Mii).
 
 ## Found on this game
+
+- **Base-release packing error (resolved diagnostic; AArch32 support remains open):** [Unsupported 32-bit game builds](../../../docs/reference/rewriter.md#unsupported-32-bit-game-builds).
 
 - **Save-write failure isolation (resolved; host regression):** the separate device and account saves make this game a relevant two-save case. Failure state, recovery and commit synchronization now belong to each backing transaction: [Save-write failures stay with their backing transaction](../../../docs/reference/services.md#save-write-failures-stay-with-their-backing-transaction).
 

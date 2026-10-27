@@ -2,6 +2,22 @@
 
 The NSO rewriter (`dm/tools/patch_nso.py`) and its per-build tables (`dm/tools/sdk_patches.py`, a profile's `patches.py`). Each entry: symptom, cause, fix, the games it was found on. The [symptom index](../agents/symptoms.md) lists every symptom.
 
+## Input architecture
+
+### Capstone API version
+
+- **Symptom:** `NameError: name 'CS_ARCH_ARM64' is not defined` at the start of `patch_nso.py`.
+- **Cause:** Capstone 6 renames the architecture to `CS_ARCH_AARCH64` and changes operand constants; the rewriter uses the Capstone 5 API. An unrestricted dependency installation can select an incompatible version.
+- **Fix:** install `capstone>=5,<6`. The packing script checks the major API version before building or surveying and prints the install command for its Python interpreter. The player instructions and CI use the same version constraint. Capstone 6 support remains unvalidated.
+- **Found on:** [Celeste](../../dm/games/01002B30028F6000/README.md#found-on-this-game).
+
+### Unsupported 32-bit game builds
+
+- **Symptom:** packing stops with `KeyError: 6` in `nso_syms.dynsyms`, called by `profile_guess.build_sources`.
+- **Cause:** a 32-bit ARM build has ELF32 dynamic entries and symbols. Reading pairs of 32-bit tag/value fields as ELF64 entries produces bogus tags and misses `DT_SYMTAB`. The host and rewriter require AArch64; adding ELF32 symbol parsing alone would not make the game runnable.
+- **Fix:** the NSP script checks the NPDM META execution flag (bit 0 at offset `0xc`) after extraction, including reused extractions, and before surveying symbols. AArch32 builds stop with an explicit unsupported-architecture error. Use a supported AArch64 update when available. AArch32 execution remains unsupported.
+- **Found on:** [Mario Kart 8 Deluxe](../../dm/games/0100152000022000/README.md#what-it-needs).
+
 ## Patches across updates
 
 ### Function-matched cuts for unregistered builds
